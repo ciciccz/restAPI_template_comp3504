@@ -27,7 +27,7 @@ module.exports.register = (app, database) => {
 
 
         try {
-            query = database.query('SELECT * FROM item where id = ?');            // SQL query
+            query = database.query(`SELECT * FROM item where id = ?`);            // SQL query
             const results = await database.query(query, [itemId]); // Execute the query with the ID as a parameter
 
             if (results.length === 0) {
