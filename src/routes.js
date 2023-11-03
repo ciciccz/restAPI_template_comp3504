@@ -44,7 +44,7 @@ module.exports.register = (app, database) => {
     app.get('/api/item', async (req, res) => {
 
         const itemName = req.query.name;
-
+        print(itemName)
         if (!itemName) {
             return res.status(400).send('Item name is required').end();
         }
@@ -53,7 +53,7 @@ module.exports.register = (app, database) => {
 
 
         try {
-            query = `SELECT * FROM item QUANTITY LOWER(name) = 'LOWER(?)'`;            // SQL query
+            query = `SELECT * FROM item WHERE quantity = name`;            // SQL query
             const results = await database.query(query, [itemName.trim()]); // Execute the query with the ID as a parameter
 
             if (results.length === 0) {
