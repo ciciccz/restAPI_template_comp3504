@@ -41,7 +41,7 @@ module.exports.register = (app, database) => {
         }
     });
 
-    app.get('/api/item/', async (req, res) => {
+    app.get('/api/item', async (req, res) => {
 
         const itemName = req.query.name;
 
