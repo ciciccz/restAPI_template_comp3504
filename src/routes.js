@@ -41,4 +41,30 @@ module.exports.register = (app, database) => {
         }
     });
 
+    app.get('/api/item/', async (req, res) => {
+
+        const itemName = req.query.name;
+
+        if (!itemName) {
+            return res.status(400).send('Item name is required').end();
+        }
+
+        let query;
+
+
+        try {
+            query = `SELECT * FROM item where name = ?`;            // SQL query
+            const results = await database.query(query, [itemName]); // Execute the query with the ID as a parameter
+
+            if (results.length === 0) {
+                return res.status(404).send('Item not found').end();
+            }
+
+            res.status(200).send(JSON.stringify(results[0])).end(); // Send the first item found as a response
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('An error occurred while fetching the item').end();
+        }
+    });
+
 };
