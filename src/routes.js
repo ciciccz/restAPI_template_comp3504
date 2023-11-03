@@ -53,8 +53,8 @@ module.exports.register = (app, database) => {
 
 
         try {
-            query = `SELECT * FROM item where name = ?`;            // SQL query
-            const results = await database.query(query, [itemName]); // Execute the query with the ID as a parameter
+            query = `SELECT * FROM item WHERE LOWER(name) = LOWER(?)`;            // SQL query
+            const results = await database.query(query, [itemName.trim()]); // Execute the query with the ID as a parameter
 
             if (results.length === 0) {
                 return res.status(404).send('Item not found').end();
