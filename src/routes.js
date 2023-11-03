@@ -66,4 +66,27 @@ module.exports.register = (app, database) => {
         }
     });
 
+    app.post('/api/item', async (req, res) => {
+
+        const { Id, Name, Quantity, Price, Supplier_id } = req.body;
+
+        if (Id == null || !Name || Quantity == null || Price == null || Supplier_id == null) {
+            return res.status(400).send('Id, Name, Quantity, Price, and Supplier_id are required').end();
+        }
+
+        try {
+            const query = `INSERT INTO item (Id, Name, Quantity, Price, Supplier_id) VALUES (?, ?, ?, ?, ?)`;
+            const result = await database.query(query, [Id, Name, Quantity, Price, Supplier_id]);
+
+            if (result.affectedRows) {
+                res.status(201).send({ Id, Name, Quantity, Price, Supplier_id });
+            } else {
+                throw new Error('Insert failed, no rows affected.');
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('An error occurred while creating the item').end();
+        }
+    }
+    );
 };
