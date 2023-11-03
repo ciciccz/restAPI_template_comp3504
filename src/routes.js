@@ -53,7 +53,7 @@ module.exports.register = (app, database) => {
 
 
         try {
-            query = `SELECT * FROM item WHERE LOWER(name) = LOWER(?)`;            // SQL query
+            query = `SELECT * FROM item WHERE LOWER(name) = 'LOWER(?)'`;            // SQL query
             const results = await database.query(query, [itemName.trim()]); // Execute the query with the ID as a parameter
 
             if (results.length === 0) {
