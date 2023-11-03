@@ -79,7 +79,7 @@ module.exports.register = (app, database) => {
             const result = await database.query(query, [Id, Name, Quantity, Price, Supplier_id]);
 
             if (result.affectedRows) {
-                res.status(201).send({ Id, Name, Quantity, Price, Supplier_id });
+                res.status(201).send(`new item with ${Id} is created`);
             } else {
                 throw new Error('Insert failed, no rows affected.');
             }
