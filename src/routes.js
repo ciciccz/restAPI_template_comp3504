@@ -44,7 +44,7 @@ module.exports.register = (app, database) => {
     app.get('/api/item', async (req, res) => {
 
         const itemName = req.query.name;
-        print(itemName)
+        console.log(itemName)
         if (!itemName) {
             return res.status(400).send('Item name is required').end();
         }
