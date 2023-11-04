@@ -117,7 +117,7 @@ module.exports.register = (app, database) => {
             query = `DELETE FROM item where id = ?`;
             const results = await database.query(query, [itemId]);
 
-            res.status(200).send(`item with id ${Id} is deleted`).end();
+            res.status(200).send(`item with id ${itemId} is deleted`).end();
         } catch (error) {
             console.error(error);
             res.status(500).send(error).end();
