@@ -100,7 +100,7 @@ module.exports.register = (app, database) => {
 
         try {
             const query = `UPDATE item SET Name = ?, Quantity = ?, Price = ?, Supplier_id = ? WHERE Id = ?`;
-            const result = await database.query(query, [Id, Name, Quantity, Price, Supplier_id]);
+            const result = await database.query(query, [Name, Quantity, Price, Supplier_id, Id]);
 
             if (result.affectedRows === 0) {
                 // No rows affected means the item with the given Id doesn't exist
