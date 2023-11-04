@@ -11,12 +11,15 @@ module.exports.register = (app, database) => {
         const itemName = req.query.name;
 
         if (!itemName) {
-            let query;
-            query = database.query('SELECT * FROM item');
+            try {
+                const query = 'SELECT * FROM item';
+                const records = await database.query(query); // Make sure to await the promise
 
-            const records = await query;
-
-            res.status(200).send(JSON.stringify(records)).end();
+                return res.status(200).send(JSON.stringify(records)); // Added return here
+            } catch (error) {
+                console.error(error);
+                return res.status(500).send('An error occurred while fetching the items'); // Added return here
+            }
         }
 
         let query;
@@ -37,25 +40,27 @@ module.exports.register = (app, database) => {
     });
 
     app.get('/api/item/:id', async (req, res) => {
+
+        const itemId = req.params.id;
+
+        let query;
+
         try {
-            const itemId = req.params.id;
-            if (!itemId) {
-                return res.status(400).send('Item ID is required');
+            query = `SELECT * FROM item where id = ?`;
+            const results = await database.query(query, [itemId]);
+
+            if (results.length === 0) {
+                return res.status(404).send('Item not found').end();
             }
 
-            const query = `SELECT * FROM item WHERE id = ?`;
-            const results = await database.query(query, [itemId]);
-            if (results.length === 0) {
-                return res.status(404).send('Item not found');
-            }
-            res.status(200).send(JSON.stringify(results[0]));
+            res.status(200).send(JSON.stringify(results[0])).end();
         } catch (error) {
-            if (!res.headersSent) {
-                console.error(error);
-                res.status(500).send('An error occurred while fetching the item');
-            }
+            console.error(error);
+            res.status(500).send('An error occurred while fetching the item').end();
         }
     });
+
+
     app.post('/api/item', async (req, res) => {
 
         const { Id, Name, Quantity, Price, Supplier_id } = req.body;
