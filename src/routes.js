@@ -106,5 +106,26 @@ module.exports.register = (app, database) => {
         }
     }
     );
+
+    app.delete('/api/item/:id', async (req, res) => {
+
+        const itemId = req.params.id;
+
+        let query;
+
+        try {
+            query = `DELETE FROM item where id = ?`;
+            const results = await database.query(query, [itemId]);
+
+            if (results.length === 0) {
+                return res.status(404).send('Item not found').end();
+            }
+
+            res.status(200).send(JSON.stringify(results[0])).end();
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('An error occurred while fetching the item').end();
+        }
+    });
 };
 
