@@ -121,7 +121,7 @@ module.exports.register = (app, database) => {
                 return res.status(404).send('Item not found').end();
             }
 
-            res.status(200).send(JSON.stringify(results[0])).end();
+            res.status(200).send(`item with id ${Id} is deleted`).end();
         } catch (error) {
             console.error(error);
             res.status(500).send('An error occurred while fetching the item').end();
