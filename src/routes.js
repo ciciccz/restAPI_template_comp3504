@@ -89,4 +89,29 @@ module.exports.register = (app, database) => {
         }
     }
     );
+
+    app.put('/api/item', async (req, res) => {
+
+        const { Id, Name, Quantity, Price, Supplier_id } = req.body;
+
+        if (Id == null || !Name || Quantity == null || Price == null || Supplier_id == null) {
+            return res.status(400).send('Id, Name, Quantity, Price, and Supplier_id are required').end();
+        }
+
+        try {
+            const query = `UPDATE item SET Name = ?, Quantity = ?, Price = ?, Supplier_id = ? WHERE Id = ?`;
+            const result = await database.query(query, [Id, Name, Quantity, Price, Supplier_id]);
+
+            if (result.affectedRows === 0) {
+                // No rows affected means the item with the given Id doesn't exist
+                return res.status(404).send(`Item with ID ${Id} not found`).end();
+            } else {
+                res.status(200).send(`Item with ID ${Id} updated successfully`);
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('An error occurred while creating the item').end();
+        }
+    }
+    );
 };
