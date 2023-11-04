@@ -37,28 +37,25 @@ module.exports.register = (app, database) => {
     });
 
     app.get('/api/item/:id', async (req, res) => {
-
-        const itemId = req.params.id;
-
-        let query;
-
         try {
-            query = `SELECT * FROM item where id = ?`;
-            const results = await database.query(query, [itemId]);
-
-            if (results.length === 0) {
-                return res.status(404).send('Item not found').end();
+            const itemId = req.params.id;
+            if (!itemId) {
+                return res.status(400).send('Item ID is required');
             }
 
-            res.status(200).send(JSON.stringify(results[0])).end();
+            const query = `SELECT * FROM item WHERE id = ?`;
+            const results = await database.query(query, [itemId]);
+            if (results.length === 0) {
+                return res.status(404).send('Item not found');
+            }
+            res.status(200).send(JSON.stringify(results[0]));
         } catch (error) {
             if (!res.headersSent) {
                 console.error(error);
-                res.status(500).send('An error occurred while fetching the item').end();
+                res.status(500).send('An error occurred while fetching the item');
             }
-        });
-
-
+        }
+    });
     app.post('/api/item', async (req, res) => {
 
         const { Id, Name, Quantity, Price, Supplier_id } = req.body;
