@@ -52,10 +52,11 @@ module.exports.register = (app, database) => {
 
             res.status(200).send(JSON.stringify(results[0])).end();
         } catch (error) {
-            console.error(error);
-            res.status(500).send('An error occurred while fetching the item').end();
-        }
-    });
+            if (!res.headersSent) {
+                console.error(error);
+                res.status(500).send('An error occurred while fetching the item').end();
+            }
+        });
 
 
     app.post('/api/item', async (req, res) => {
