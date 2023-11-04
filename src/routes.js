@@ -117,14 +117,10 @@ module.exports.register = (app, database) => {
             query = `DELETE FROM item where id = ?`;
             const results = await database.query(query, [itemId]);
 
-            if (results.length === 0) {
-                return res.status(404).send('Item not found').end();
-            }
-
             res.status(200).send(`item with id ${Id} is deleted`).end();
         } catch (error) {
             console.error(error);
-            res.status(500).send('An error occurred while fetching the item').end();
+            res.status(500).send(error).end();
         }
     });
 };
