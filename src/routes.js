@@ -89,7 +89,7 @@ module.exports.register = (app, database) => {
     );
 };
 
-sendJson = async (query, param, errorMsg) => {
+sendJson = async (query, param) => {
 
     try {
         const results = await database.query(query, param);
